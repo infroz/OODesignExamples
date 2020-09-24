@@ -17,3 +17,9 @@ Resource* ObjectPool::getResource()
 		return resource;
 	}
 }
+
+void ObjectPool::returnResource(Resource* object)
+{
+	object->clean();
+	resourcePool.push_back(object);
+}

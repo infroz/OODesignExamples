@@ -8,5 +8,6 @@ private:
 	std::list<Resource*> resourcePool;
 public:
 	Resource* getResource();
+	void returnResource(Resource* object);
 };
 
