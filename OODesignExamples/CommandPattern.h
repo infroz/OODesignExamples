@@ -27,14 +27,34 @@ public:
 	}
 };
 
+class Bartender // Receiver
+{
+public:
+	void PrepDrink(string drink) {
+		cout << "Bartender - Im making a " << drink << "!\n";
+	}
+
+};
+
+
+class DrinkOrder : public Order // ConcreteCommand
+{
+private:
+	Bartender* receiver;
+	string drink;
+public:
+	DrinkOrder(Bartender* rcv, string type) : receiver(rcv), drink(type){}
+	void Execute() override {
+		receiver->PrepDrink(drink);
+	}
+};
+
 class BurgerOrder : public Order // ConcreteCommand
 {
 private:
 	Chef* receiver;
 public:
-	BurgerOrder(Chef* rcv) : receiver(rcv)
-	{
-	}
+	BurgerOrder(Chef* rcv) : receiver(rcv){}
 	void Execute() override {
 		receiver->CookBurger();
 	}
@@ -72,10 +92,19 @@ public:
 		if (queue.empty())
 			return;
 
-		cout << "Waiter - An order has been sent to the chef\n";
+		cout << "Waiter - An order has been sent to a receiver (producer)\n";
 		queue.front()->Execute();
 		queue.pop_front();
 
+	}
+
+	void deleteOrder(Order* order) {
+		queue.remove(order);
+	}
+
+	void deleteLatest() {
+		cout << "Waiter - Order was deleted\n";
+		queue.pop_back();
 	}
 };
 
@@ -86,18 +115,28 @@ public:
 		// Initializing invoker and receiver
 		Waiter waiter;
 		Chef chef;
+		Bartender bartender;
 
 		// Client creates orders
 		BurgerOrder order(&chef);
 		CustomOrder cOrder(&chef, "French Toast");
+		DrinkOrder drinkOrder(&bartender, "Margarita");
+		DrinkOrder drinkOrder2(&bartender, "Moscow Mule");
 
 		// Waiter takes orders
 		waiter.placeOrder(&order);
 		waiter.placeOrder(&cOrder);
+		waiter.placeOrder(&drinkOrder);
+		waiter.placeOrder(&drinkOrder2);
+
+		//  Waiter misplaced order
+		waiter.deleteLatest();
 
 		// Waiter sends orders
 		waiter.sendOldestOrder();
 		waiter.sendOldestOrder();
+		waiter.sendOldestOrder();
+		waiter.sendOldestOrder(); // This order wont be executed as it doesnt exist
 	}
 };
 

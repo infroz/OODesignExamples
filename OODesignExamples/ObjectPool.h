@@ -15,6 +15,7 @@ class ReusablePool
 {
 private:
 	std::list<Resource*> _available;
+	int maxSize = 1;
 public:
 	ReusablePool() {
 	}
@@ -27,9 +28,15 @@ public:
 
 	void returnResource(Resource* object)
 	{
-		object->clean = true; // Calls a "reset" function
-		_available.push_back(object); // adds resource back to pool
-		std::cout << "Resource has been returned to pool!\n";
+		if (_available.size() >= maxSize) {
+			// If we've returned more glasses than we can store, return to "storage"
+			delete object;
+			std::cout << "Glass has been removed and we've freed up space!\n";
+		} else {
+			object->clean = true; // Calls a "reset" function
+			_available.push_back(object); // adds resource back to pool
+			std::cout << "Resource has been returned to pool!\n";
+		}
 	}
 
 	Resource* getResource()
