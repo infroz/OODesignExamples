@@ -3,10 +3,11 @@
 #include "future"
 #include "CommandPattern.h"
 #include "ObjectPool.h"
+#include "ChainOfResponsibility.h"
 
 int main()
 {
-	ObjectPoolPattern cm;
+	ChainOfResponsibility cm;
 
 	cm.run();
 }

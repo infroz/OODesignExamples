@@ -59,6 +59,10 @@ class ChefHandler : public OrderHandler
 class WaiterHandler : public OrderHandler
 {
 public:
+	void takeOrder(std::string i) {
+		std::cout << "Waiter accepted order " + i + "\n";
+		OrderHandler::handle(i);
+	}
 	void handle(std::string i)
 	{
 		std::cout << "Waiter is serving order " + i + "\n";
@@ -76,8 +80,9 @@ public:
 		bartender.setSuccsessor(&chef);
 		bartender.setWaiter(&waiter); // shortcut to waiter
 		chef.setSuccsessor(&waiter);
+		waiter.setSuccsessor(&bartender);
 
-		bartender.handle("1 drink");
-		bartender.handle("1 meal 2 drinks");
+		waiter.takeOrder("1 drink");
+		waiter.takeOrder("1 meal 2 drinks");
 	}
 };

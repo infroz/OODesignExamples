@@ -103,7 +103,7 @@ public:
 	}
 
 	void deleteLatest() {
-		cout << "Waiter - Order was deleted\n";
+		cout << "Waiter - An order has been sent to a receiver (producer)\n";
 		queue.pop_back();
 	}
 };
